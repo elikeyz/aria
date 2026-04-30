@@ -43,6 +43,7 @@ export default function ChatInput({ messages, setMessages, loading, setLoading }
         ? data.response
         : "I'm sorry, something went wrong. Please try again."
       setMessages(prev => [...prev, { role: 'assistant', content }])
+      if (textareaRef.current) textareaRef.current.focus();
     } catch {
       setMessages(prev => [
         ...prev,

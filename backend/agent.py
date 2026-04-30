@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 async def run_assistant_agent(messages):
-  logger.info("Starting Aria AI agent with messages")
+  logger.info(f"Starting Aria AI agent with messages: {messages}")
 
   MODEL = "gpt-4o-mini"
 
