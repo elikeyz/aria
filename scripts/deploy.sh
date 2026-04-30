@@ -35,7 +35,12 @@ TERRAFORM_DIR="$(cd "$(dirname "$0")/../terraform" && pwd)"
 
 cd "$TERRAFORM_DIR"
 
-terraform init
+terraform init -input=false \
+  -backend-config="bucket=aria-terraform-state-${ACCOUNT_ID}" \
+  -backend-config="key=dev/terraform.tfstate" \
+  -backend-config="region=${REGION}" \
+  -backend-config="dynamodb_table=aria-terraform-locks" \
+  -backend-config="encrypt=true"
 
 ECR_URL=$(terraform output -raw ecr_repository_url || true)
 
