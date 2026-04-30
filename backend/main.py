@@ -6,6 +6,10 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from agent import run_assistant_agent
+from mcp_server import create_meridian_mcp_server
+from schemas import ChatRequest
+
 load_dotenv(override=True)
 
 logging.basicConfig(level=logging.INFO)
@@ -56,6 +60,46 @@ def read_root():
         "success": True,
     }
 
+@app.get("/health")
+def read_health():
+    return {
+        "message": "Backend API is healthy!",
+        "success": True,
+    }
+
+@app.get("/mcp-test")
+async def mcp_test():
+    try:
+        async with create_meridian_mcp_server() as mcp_server:
+            tools = await mcp_server.list_tools()
+
+            return {
+                "message": "MCP tools retrieved successfully!",
+                "success": True,
+                "tools": tools,
+            }
+    except Exception as e:
+        logger.exception("Error during MCP test: %s", e)
+        return JSONResponse(
+            status_code=500,
+            content={"success": False, "message": "Failed to retrieve MCP tools. Please try again."},
+        )
+
+@app.post("/api/v1/chat")
+async def chat_assistant(request: ChatRequest):
+    try:
+        response = await run_assistant_agent(request.messages)
+        return {
+            "message": "Agent response generated successfully!",
+            "success": True,
+            "response": response,
+        }
+    except Exception as e:
+        logger.exception("Error during chat processing: %s", e)
+        return JSONResponse(
+            status_code=500,
+            content={"success": False, "message": "Failed to process chat request. Please try again."},
+        )
 
 if __name__ == "__main__":
     import uvicorn

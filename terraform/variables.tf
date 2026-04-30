@@ -8,13 +8,3 @@ variable "openai_api_key" {
   type        = string
   sensitive   = true
 }
-
-variable "bedrock_model_id" {
-  description = "Bedrock model ID to use for agents"
-  type        = string
-}
-
-variable "bedrock_region" {
-  description = "AWS region for Bedrock"
-  type        = string
-}

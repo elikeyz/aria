@@ -23,8 +23,8 @@ data "aws_caller_identity" "current" {}
 # ECR Repository
 # ========================================
 
-resource "aws_ecr_repository" "mcp-exam-api" {
-  name                 = "mcp-exam-api"
+resource "aws_ecr_repository" "aria-api" {
+  name                 = "aria-api"
   image_tag_mutability = "MUTABLE"
   force_delete         = true  # Allow deletion even with images
 
@@ -33,7 +33,7 @@ resource "aws_ecr_repository" "mcp-exam-api" {
   }
 
   tags = {
-    Project = "mcp-exam"
+    Project = "aria"
     Part    = "backend"
   }
 }
@@ -44,7 +44,7 @@ resource "aws_ecr_repository" "mcp-exam-api" {
 
 # IAM role for App Runner
 resource "aws_iam_role" "app_runner_role" {
-  name = "mcp-exam-app-runner-role"
+  name = "aria-app-runner-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -67,7 +67,7 @@ resource "aws_iam_role" "app_runner_role" {
   })
 
   tags = {
-    Project = "mcp-exam"
+    Project = "aria"
     Part    = "backend"
   }
 }
@@ -80,7 +80,7 @@ resource "aws_iam_role_policy_attachment" "app_runner_ecr_access" {
 
 # IAM role for App Runner instance (runtime access to AWS services)
 resource "aws_iam_role" "app_runner_instance_role" {
-  name = "mcp-exam-app-runner-instance-role"
+  name = "aria-app-runner-instance-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -96,14 +96,14 @@ resource "aws_iam_role" "app_runner_instance_role" {
   })
 
   tags = {
-    Project = "mcp-exam"
+    Project = "aria"
     Part    = "backend"
   }
 }
 
 # Policy for App Runner instance to access Bedrock
 resource "aws_iam_role_policy" "app_runner_instance_bedrock_access" {
-  name = "mcp-exam-app-runner-instance-bedrock-policy"
+  name = "aria-app-runner-instance-bedrock-policy"
   role = aws_iam_role.app_runner_instance_role.id
 
   policy = jsonencode({
@@ -123,8 +123,8 @@ resource "aws_iam_role_policy" "app_runner_instance_bedrock_access" {
 }
 
 # App Runner service
-resource "aws_apprunner_service" "mcp-exam-api" {
-  service_name = "mcp-exam-api"
+resource "aws_apprunner_service" "aria-api" {
+  service_name = "aria-api"
 
   source_configuration {
     auto_deployments_enabled = false
@@ -135,15 +135,13 @@ resource "aws_apprunner_service" "mcp-exam-api" {
     }
 
     image_repository {
-      image_identifier      = "${aws_ecr_repository.mcp-exam-api.repository_url}:latest"
+      image_identifier      = "${aws_ecr_repository.aria-api.repository_url}:latest"
       image_configuration {
         port = "8000"
         runtime_environment_variables = {
           ENVIRONMENT        = "production"
           OPENAI_API_KEY     = var.openai_api_key
           DEFAULT_AWS_REGION = var.aws_region
-          BEDROCK_MODEL_ID   = var.bedrock_model_id
-          BEDROCK_REGION     = var.bedrock_region
         }
       }
       image_repository_type = "ECR"
@@ -157,7 +155,7 @@ resource "aws_apprunner_service" "mcp-exam-api" {
   }
 
   tags = {
-    Project = "mcp-exam"
+    Project = "aria"
     Part    = "backend"
   }
 }
