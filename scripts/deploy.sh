@@ -30,6 +30,9 @@ echo "Region: $REGION"
 echo ""
 echo "Getting ECR repository URL..."
 
+export TF_IN_AUTOMATION=1
+export TF_CLI_ARGS="-no-color"
+
 ORIGINAL_DIR=$(pwd)
 TERRAFORM_DIR="$(cd "$(dirname "$0")/../terraform" && pwd)"
 
@@ -39,15 +42,15 @@ terraform init -input=false \
   -backend-config="bucket=aria-terraform-state-${ACCOUNT_ID}" \
   -backend-config="key=dev/terraform.tfstate" \
   -backend-config="region=${REGION}" \
-  -backend-config="dynamodb_table=aria-terraform-locks" \
+  -backend-config="use_lockfile=true" \
   -backend-config="encrypt=true"
 
-ECR_URL=$(terraform output -raw ecr_repository_url || true)
+ECR_URL=$(terraform output -raw ecr_repository_url 2>/dev/null | tr -d '\r')
 
 cd "$ORIGINAL_DIR"
 
-if [ -z "$ECR_URL" ]; then
-  echo "Error: ECR repository not found. Run 'terraform apply' first."
+if [[ -z "$ECR_URL" || "$ECR_URL" == *"Warning"* ]]; then
+  echo "❌ Invalid or missing ECR URL from Terraform"
   exit 1
 fi
 
