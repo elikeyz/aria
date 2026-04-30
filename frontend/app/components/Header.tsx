@@ -1,7 +1,7 @@
 export default function Header() {
   return (
     <header
-      className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b"
+      className="shrink-0 flex items-center justify-between px-6 py-4 border-b"
       style={{ background: '#050c18', borderColor: 'rgba(255,255,255,0.06)' }}
     >
       <div className="flex items-center gap-3">

@@ -22,7 +22,7 @@ output "setup_instructions" {
     API URL: https://${aws_apprunner_service.aria-api.service_url}
 
     Test the recipe endpoint with:
-    curl https://${aws_apprunner_service.aria-api.service_url}/api/generate-recipe -H "Content-Type: application/json" -d '{"ingredients": ["rice", "yam", "goat meat"], "calorie_target": 270, "dislikes": ["onion"], "allergies": ["avocado pear"]}'
+    curl https://${aws_apprunner_service.aria-api.service_url}/api/v1/chat -H "Content-Type: application/json" -d '{"ingredients": ["rice", "yam", "goat meat"], "calorie_target": 270, "dislikes": ["onion"], "allergies": ["avocado pear"]}'
 
     Note: You'll need to deploy your actual backend code to App Runner.
     Follow the guide for instructions on building and deploying the Docker image.

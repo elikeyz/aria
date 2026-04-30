@@ -55,7 +55,7 @@ export default function ChatInput({ messages, setMessages, loading, setLoading }
     } finally {
       setLoading(false)
     }
-  }, [input, loading, messages])
+  }, [input, loading, messages, setMessages, setLoading]);
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -66,7 +66,7 @@ export default function ChatInput({ messages, setMessages, loading, setLoading }
 
   return (
     <footer
-      className="flex-shrink-0 px-4 py-4 border-t"
+      className="shrink-0 px-4 py-4 border-t"
       style={{ background: '#050c18', borderColor: 'rgba(255,255,255,0.06)' }}
     >
       <div className="max-w-2xl mx-auto">
@@ -95,7 +95,7 @@ export default function ChatInput({ messages, setMessages, loading, setLoading }
           <button
             onClick={sendMessage}
             disabled={loading || !input.trim()}
-            className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all meridian-send-btn"
+            className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center transition-all meridian-send-btn"
             aria-label="Send message"
           >
             <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">

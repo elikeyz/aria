@@ -26,7 +26,7 @@ export default function ChatInterface({ messages, loading }: ChatInterfaceProps)
           >
             {/* Avatar */}
             <div
-              className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold"
+              className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold"
               style={
                 msg.role === 'assistant'
                   ? {
@@ -73,7 +73,7 @@ export default function ChatInterface({ messages, loading }: ChatInterfaceProps)
         {loading && (
           <div className="flex items-end gap-3">
             <div
-              className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold"
+              className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold"
               style={{
                 background: 'linear-gradient(135deg, #3b82f6, #22d3ee)',
                 color: '#fff',

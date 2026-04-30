@@ -19,3 +19,4 @@ terraform.tfstate.d/
 *.tfstate
 *.tfstate.backup
 github-oidc.tf
+backend-setup.tf
